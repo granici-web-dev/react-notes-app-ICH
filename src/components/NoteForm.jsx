@@ -1,8 +1,9 @@
 import { useForm } from 'react-hook-form';
+import { useEffect } from 'react';
 import { connect } from 'react-redux';
-import { addNote } from '../redux/actions';
+import { addNote, updateNote } from '../redux/actions';
 
-function NoteForm({ dispatch }) {
+function NoteForm({ dispatch, editingNote }) {
   const {
     register,
     handleSubmit,
@@ -10,9 +11,19 @@ function NoteForm({ dispatch }) {
     formState: { errors },
   } = useForm();
 
+  useEffect(() => {
+    if (editingNote) {
+      reset({ title: editingNote.title, content: editingNote.content });
+    }
+  }, [editingNote, reset]);
+
   const onSubmit = (data) => {
-    dispatch(addNote(data));
-    reset();
+    if (editingNote) {
+      dispatch(updateNote({ ...editingNote, ...data }));
+    } else {
+      dispatch(addNote(data));
+    }
+    reset({ title: '', content: '' });
   };
 
   return (
@@ -23,7 +34,6 @@ function NoteForm({ dispatch }) {
           className="border border-solid border-gray-400 py-3 px-4"
           type="text"
           id="title"
-          name="title"
           placeholder="Your note"
           {...register('title', { required: true })}
         />
@@ -35,7 +45,6 @@ function NoteForm({ dispatch }) {
         <textarea
           className="border border-solid border-gray-400 py-3 px-4"
           id="content"
-          name="content"
           placeholder="Some text"
           {...register('content', { required: true })}
         />
@@ -43,18 +52,17 @@ function NoteForm({ dispatch }) {
       </div>
 
       <input
-        className="bg-gray-900 text-white py-4 rounded-2xl transition duration-200 ease-in-out hover:bg-gray-700 cursor-pointer"
+        className={`text-white py-4 rounded-2xl transition duration-200 ease-in-out cursor-pointer
+          ${editingNote ? 'bg-blue-600 hover:bg-blue-700' : 'bg-gray-900 hover:bg-gray-700'}`}
         type="submit"
-        value="Add note"
+        value={editingNote ? 'Save note' : 'Add note'}
       />
     </form>
   );
 }
 
-const mapStateToProps = (state) => {
-  return {
-    notes: state.data,
-  };
-};
+const mapStateToProps = (state) => ({
+  editingNote: state.editingNote,
+});
 
 export default connect(mapStateToProps)(NoteForm);

@@ -3,7 +3,7 @@ import NoteList from './NoteList';
 
 function Main() {
   return (
-    <main className="flex-grow">
+    <main className="grow">
       <NoteForm />
       <NoteList />
     </main>

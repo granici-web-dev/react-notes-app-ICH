@@ -16,6 +16,19 @@ const todoReducer = (state = initialState, action) => {
         data: state.data.filter((note) => note.id !== action.payload.id),
       };
 
+    case 'EDIT_NOTE':
+      return {
+        ...state,
+        editingNote: action.payload,
+      };
+
+    case 'UPDATE_NOTE':
+      return {
+        ...state,
+        data: state.data.map((note) => (note.id === action.payload.id ? action.payload : note)),
+        editingNote: null,
+      };
+
     default:
       return state;
   }
