@@ -5,9 +5,11 @@ import Main from './components/Main';
 
 function App() {
   return (
-    <div className='flex flex-col justify-between'>
-      <Header />
-      <Main />
+    <div className="min-h-screen flex flex-col justify-between">
+      <div>
+        <Header />
+        <Main />
+      </div>
       <Footer />
     </div>
   );

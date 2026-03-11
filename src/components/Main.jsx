@@ -1,7 +1,13 @@
+import NoteForm from './NoteForm';
+import NoteList from './NoteList';
+
 function Main() {
-  return <div>
-    <h1>Hello</h1>
-  </div>
+  return (
+    <main className="flex-grow">
+      <NoteForm />
+      <NoteList />
+    </main>
+  );
 }
 
 export default Main;
